@@ -1,6 +1,7 @@
 models/
 valid/
-.ipynb_checkpoints/
+.ipynb_checkpoints/*
+.ipynb_checkpoints/efnet-checkpoint.ipynb
 test/
 train/
 *.csv

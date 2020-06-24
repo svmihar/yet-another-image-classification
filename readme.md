@@ -9,7 +9,7 @@
 ## efficientnetB3
 gak ada image untuk di validate. `train_test_split` di train aja
 - [x] training
-- [ ] ganti imagedatagenerator dari from folder ke from dataframe biar lebih mudah di reproduce
+- [ ] ganti imagedatagenerator dari from folder ke [from dataframe](https://studymachinelearning.com/keras-imagedatagenerator-with-flow_from_dataframe/) biar lebih mudah di reproduce
 
 # visualize
  - [ ] [dari sini](https://www.youtube.com/watch?v=gMUgyy-BlmM)
