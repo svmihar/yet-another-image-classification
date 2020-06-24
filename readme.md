@@ -7,7 +7,9 @@
 - [ ] infer
 
 ## efficientnetB3
-- [ ] training
+gak ada image untuk di validate. `train_test_split` di train aja
+- [x] training
+- [ ] ganti imagedatagenerator dari from folder ke from dataframe biar lebih mudah di reproduce
 
 # visualize
  - [ ] [dari sini](https://www.youtube.com/watch?v=gMUgyy-BlmM)
