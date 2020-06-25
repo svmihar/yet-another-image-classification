@@ -1,4 +1,5 @@
 models/
+dataset/
 valid/
 .ipynb_checkpoints/*
 .ipynb_checkpoints/efnet-checkpoint.ipynb

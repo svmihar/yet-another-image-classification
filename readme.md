@@ -1,3 +1,5 @@
+pip install tensorflow-gpu==1.14.0 keras==2.3.0
+
 # dataset 
 [shopee classification](https://drive.google.com/uc\?id\=1CAUCMeDcrguVpfc72angE-8jW8BETwyl)
 
