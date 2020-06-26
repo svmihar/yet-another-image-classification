@@ -16,7 +16,7 @@ while True:
     time.sleep(1800)
     c+=1
     os.system('drive add_remote')
-    if c>10: 
+    if c>11: 
         os.chdir('../')
         os.system('finish_me.py')
 
