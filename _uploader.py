@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 
-os.chdir('./models')
+os.chdir('./dataset/models')
 c = 0
 while True: 
     logger.info('sleeping for 30 minutes')
