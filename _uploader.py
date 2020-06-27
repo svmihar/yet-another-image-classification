@@ -22,9 +22,8 @@ os.chdir(args.model)
 root = '../../' if './dataset/models' in args.model else '../'
 c = 0
 while True:
-    logger.info("sleeping for 30 minutes")
-#    time.sleep(1800)
-    breakpoint()
+    logger.info("sleeping for 30 minutes")   
+    time.sleep(1800)
     os.system("drive add_remote")
     c+=1
     if c > args.time:
