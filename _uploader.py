@@ -27,5 +27,8 @@ while True:
     os.system("drive add_remote")
     c+=1
     if c > args.time:
+        logger.info('FINISHED, deleting dataset')
         os.chdir(root)
         os.system("python finish_me.py")
+        break()
+
