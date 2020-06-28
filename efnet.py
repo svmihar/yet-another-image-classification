@@ -61,7 +61,9 @@ class SnapshotCallbackBuilder:
 
         callback_list = [
             swa,
-            callbacks.LearningRateScheduler(schedule=self._cosine_anneal_schedule)
+            callbacks.LearningRateScheduler(schedule=self._cosine_anneal_schedule),
+            callback.ModelCheckpoint("./checkpoints/checkpoint.hdf5", monitor='loss', verbose=1,
+            save_best_only=True, mode='auto', period=1, save_weights_only=False)
         ]
 
         return callback_list
@@ -102,7 +104,6 @@ class SWA(keras.callbacks.Callback):
         print('Final model parameters set to stochastic weight average.')
         self.model.save_weights(self.filepath)
         print('Final stochastic averaged weights saved to file.')
-        
 def build_finetune_model(base_model, dropout, num_classes):
 
     x = base_model.output
