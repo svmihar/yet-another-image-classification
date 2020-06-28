@@ -21,7 +21,7 @@ from keras.applications.imagenet_utils import decode_predictions
 
 import keras.callbacks as callbacks
 from keras.layers import Dense, Activation, Flatten, Dropout
-from keras.models import Sequential, Model
+from keras.models import Sequential, Model, load_model
 
 import efficientnet.keras as efn 
 from efficientnet.keras import center_crop_and_resize, preprocess_input
@@ -62,7 +62,7 @@ class SnapshotCallbackBuilder:
         callback_list = [
             swa,
             callbacks.LearningRateScheduler(schedule=self._cosine_anneal_schedule),
-            callback.ModelCheckpoint("./checkpoints/checkpoint.hdf5", monitor='loss', verbose=1,
+            callbacks.ModelCheckpoint("./checkpoints/checkpoint.hdf5", monitor='loss', verbose=1,
             save_best_only=True, mode='auto', period=1, save_weights_only=False)
         ]
 
@@ -104,7 +104,7 @@ class SWA(keras.callbacks.Callback):
         print('Final model parameters set to stochastic weight average.')
         self.model.save_weights(self.filepath)
         print('Final stochastic averaged weights saved to file.')
-def build_finetune_model(base_model, dropout, num_classes):
+def build_finetune_model(base_model, dropout, num_classes, ckpt = './checkpoints/checkpoint.hdf5'):
 
     x = base_model.output
     
@@ -112,13 +112,11 @@ def build_finetune_model(base_model, dropout, num_classes):
     x = Flatten()(x)
     x = Dropout(dropout)(x)
     predictions = Dense(num_classes, activation='softmax', name='finalfc')(x)
+    if os.path.isfile(ckpt): 
+        return load_model(ckpt)
+    else: 
+        return Model(inputs=base_model.input, outputs=predictions)
     
-    finetune_model = Model(inputs=base_model.input, outputs=predictions)
-
-    return finetune_model
-
-
-# In[3]:
 
 
 HEIGHT = 299

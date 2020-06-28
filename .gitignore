@@ -1,4 +1,5 @@
 models/
+checkpoints/
 dataset/
 valid/
 .ipynb_checkpoints/*
