@@ -30,5 +30,5 @@ while True:
         logger.info('FINISHED, deleting dataset')
         os.chdir(root)
         os.system("python finish_me.py")
-        break()
+        break
 
