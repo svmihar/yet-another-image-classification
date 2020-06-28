@@ -1,35 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
-
-get_ipython().system('pip install albumentations > /dev/null')
-get_ipython().system('pip install -U git+https://github.com/qubvel/efficientnet')
-get_ipython().system('pip install console_progressbar')
-get_ipython().system('pip install pandas')
-
-
-# # buat test images
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# # Train
-
-# In[1]:
-
 
 import os
+import pandas as pd
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
@@ -159,23 +133,37 @@ train_datagen = ImageDataGenerator(
         height_shift_range=0.1,
         zoom_range=[0.9, 1.25],
         brightness_range=[0.5, 1.5],
+        validation_split=.2,
         horizontal_flip=True)
 
 test_datagen = ImageDataGenerator(rescale=1./255)
 TRAIN_FOLDER = "./dataset/train/"
-TEST_FOLDER = "./dataset/test/"
+test_df = pd.read_csv('./dataset/test.csv')
+test_df['category'] = test_df['category'].apply(lambda x: str(x))
+test_df['filename'] = test_df['filename'].apply(lambda x: 'test/'+str(x))
 
 train_generator = train_datagen.flow_from_directory(
         TRAIN_FOLDER, 
         target_size=TARGET_SIZE,
         batch_size=BS,
+        subset='training', 
         class_mode='categorical')
 
-validation_generator = test_datagen.flow_from_directory(
-        TEST_FOLDER,
+validation_generator = train_datagen.flow_from_directory(
+        TRAIN_FOLDER, 
         target_size=TARGET_SIZE,
         batch_size=BS,
+        subset='validation', 
         class_mode='categorical')
+
+test_generator = test_datagen.flow_from_dataframe(
+         dataframe=test_df,
+         directory='./dataset/',
+         target_size=TARGET_SIZE,
+         x_col='filename', 
+         y_col='category', 
+         batch_size=BS,
+         class_mode='categorical')
 
 
 # In[4]:
@@ -201,22 +189,16 @@ snapshot = SnapshotCallbackBuilder(nb_epochs=epochs,nb_snapshots=1,init_lr=1e-3)
 
 history = finetune_model.fit_generator(generator=train_generator,
                                         validation_data=validation_generator,
-                                        steps_per_epoch=150,
+                                        steps_per_epoch=train_generator.samples//BS,
                                         epochs=epochs,
                                        verbose=2,
-                                       validation_steps=55,
+                                       validation_steps=validation_generator.samples//BS,
                                        callbacks=snapshot.get_callbacks())
 
 try:
     finetune_model.load_weights('./keras_swa.model')
 except Exception as e:
     print(e)
-
-
-# In[5]:
-
-
-plot_loss_acc(history)
 
 
 # In[7]:
@@ -238,7 +220,7 @@ snapshot = SnapshotCallbackBuilder(nb_epochs=epochs,nb_snapshots=1,init_lr=1e-3)
 
 history = finetune_model.fit_generator(generator=train_generator,
                                         validation_data=validation_generator,
-                                        steps_per_epoch=150,
+                                        steps_per_epoch=train_generator.samples//BS,
                                         epochs=epochs,
                                        verbose=2,
                                        validation_steps=55,
@@ -248,13 +230,16 @@ try:
     finetune_model.load_weights('./keras_swab5.model')
 except Exception as e:
     print(e)
-
-
-# In[ ]:
-
-
-plot_loss_acc(history)
-
+preds = model.predict_generator(
+    test_generator,
+    steps=len(test_generator.filenames)
+)
+image_ids = [name.split('/')[-1] for name in test_generator.filenames]
+predictions = preds.flatten()
+data = {'id': image_ids, 'has_cactus':predictions} 
+submission = pd.DataFrame(data)
+print(submission.head())
+submission.to_csv('submission.csv', index=False)
 
 # In[8]:
 
@@ -267,15 +252,14 @@ base_model = efn.EfficientNetB7(weights='imagenet',
 
 finetune_model = build_finetune_model(base_model, 
                                       dropout=0.4, 
-                                      num_classes=42)n
+                                      num_classes=42)
 
 finetune_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 snapshot = SnapshotCallbackBuilder(nb_epochs=epochs,nb_snapshots=1,init_lr=1e-3)
 
 history = finetune_model.fit_generator(generator=train_generator,
-                                        validation_data=validation_generator,
-                                        steps_per_epoch=150,
+                                        steps_per_epoch=train_generator.samples//BS,
                                         epochs=epochs,
                                        verbose=2,
                                        validation_steps=55,
