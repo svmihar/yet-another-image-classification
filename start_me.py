@@ -3,8 +3,13 @@ import argparse
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('-l', '--link', type=str, default='https://drive.google.com/uc?id=1HMkzNpiUrndGyvVqsvKBbD3yTkjOnydH',
-                    help='link google drive datasetnya ')
+parser.add_argument(
+    "-l",
+    "--link",
+    type=str,
+    default="https://drive.google.com/uc?id=1HMkzNpiUrndGyvVqsvKBbD3yTkjOnydH",
+    help="link google drive datasetnya ",
+)
 args = parser.parse_args()
 
 commands = [
