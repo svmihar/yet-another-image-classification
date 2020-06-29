@@ -11,7 +11,6 @@ import numpy as np
 import keras
 import pandas as pd
 from PIL import Image
-import cv2
 
 from keras.applications.resnet50 import preprocess_input
 from keras.preprocessing.image import ImageDataGenerator
@@ -194,7 +193,7 @@ dropout = 0.4
 epochs = 200
 swa = SWA("./keras_swa.model", epochs - 3)
 
-base_model = efn.EfficientNetB3(
+base_model = efn.EfficientNetB0(
     weights="imagenet", include_top=False, input_shape=(HEIGHT, WIDTH, 3)
 )
 
@@ -209,7 +208,7 @@ snapshot = SnapshotCallbackBuilder(nb_epochs=epochs, nb_snapshots=1, init_lr=1e-
 history = finetune_model.fit_generator(
     generator=train_generator,
     validation_data=validation_generator,
-    steps_per_epoch=train_generator.samples // BS,
+    steps_per_epoch=1000,
     epochs=epochs,
     verbose=2,
     validation_steps=validation_generator.samples // BS,
