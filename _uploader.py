@@ -32,5 +32,4 @@ def uploader(model_path = args.model):
     os.chdir(model_path)
     root = "../../" if "./dataset/models" in model_path else "../"
     os.system("drive add_remote")
-    c += 1
     os.chdir(root)

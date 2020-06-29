@@ -12,7 +12,7 @@ if args.time > 0:
     time.sleep(args.time)
 
 training_folder = "./dataset"
-os.system(f"rm -rf {training_folder}")
 uploader()
+os.system(f"rm -rf {training_folder}")
 
 # upload models to google drive
