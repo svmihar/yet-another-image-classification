@@ -28,16 +28,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-os.chdir(args.model)
-root = "../../" if "./dataset/models" in args.model else "../"
-c = 0
-while True:
-    logger.info("sleeping for 30 minutes")
-    time.sleep(1800)
+def uploader(model_path = args.model): 
+    os.chdir(model_path)
+    root = "../../" if "./dataset/models" in model_path else "../"
     os.system("drive add_remote")
     c += 1
-    if c > args.time:
-        logger.info("FINISHED, deleting dataset")
-        os.chdir(root)
-        os.system("python finish_me.py")
-        break
+    os.chdir(root)
