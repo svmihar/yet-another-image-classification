@@ -1,6 +1,7 @@
 import pretrainedmodels
 from torch import nn, cuda
 import torch.nn.functional as F
+from fastai.vision import *
 
 cuda.empty_cache()
 
