@@ -9,7 +9,7 @@ args = parser.parse_args()
 
 if args.time > 0:
     print(f"sleeping for {args.time*3600} seconds")
-    time.sleep(args.time*3600)
+    time.sleep(args.time * 3600)
 
 training_folder = "./dataset"
 uploader()

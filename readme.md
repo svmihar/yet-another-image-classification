@@ -9,7 +9,12 @@ pip install tensorflow-gpu==1.14.0 keras==2.3.0
 - [x] infer
 ### 50-32x4d
 - [x] 128
-- [ ] 224 nyangkut di phase 2, udah selesai cuman file nya gak bisa di upload stuck di paperspace
+- [x] 224 
+- [x] 299 cuman dapet 82an
+
+### 50-32x4d with more less augmentation + mixup and fp16
+- [x] 128 training phase 1
+- [ ] 224
 - [ ] 299
 
 ## efficientnetB3
@@ -20,7 +25,7 @@ gak ada image untuk di validate. `train_test_split` di train aja
 jelek banget ini yang b3, cuman 55S
 
 ## efficientnetb0
-- [ ] ganti validation steps ke 400
+- [x] ganti validation steps ke 400
 - [ ] training
 
 
