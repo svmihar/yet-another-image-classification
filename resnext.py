@@ -42,10 +42,9 @@ def train(
     min_grad_lr = learn.recorder.min_grad_lr
     print(min_grad_lr)
     logging.info("training")
-    """
     # ------------------PHASE 1--------------------
     learn.fit_one_cycle(epoch[0], max_lr=slice(min_grad_lr / 10, min_grad_lr))
-    learn.save(f"{model_filename}_1_{resolution}_mixup_fp16")
+    learn.save(f"{model_filename}_1_{resolution}_fp16")
     logging.info("phase 1 done")
     learn.unfreeze()
     learn = learn.clip_grad()
@@ -53,7 +52,6 @@ def train(
     learn.recorder.plot(suggestion=True)
     min_grad_lr = learn.recorder.min_grad_lr
     print(min_grad_lr)
-    """
     logging.info("phase 2 start")
     # ------------------PHASE 2--------------------
     learn.load(f"{model_filename}_1_{resolution}_fp16")
@@ -62,17 +60,17 @@ def train(
     learn.recorder.plot(suggestion=True)
     min_grad_lr = learn.recorder.min_grad_lr
     learn.fit_one_cycle(epoch[1], slice(min_grad_lr / 10, min_grad_lr))
-    learn.save(f"{model_filename}_2_{resolution}_mixup_fp16")
+    learn.save(f"{model_filename}_2_{resolution}_fp16")
     logging.info("phase 2 finish")
 
 
-train(128, batch_size=64, model_filename="seresnext50_32x4d")
+# train(128, batch_size=64, model_filename="seresnext50_32x4d")
 # -------------------------------------224-------------------------------------------
 train(
     224,
     batch_size=64,
     model_filename="seresnext50_32x4d",
-    model_checkpoint="seresnext50_32x4d_2_128_mixup_fp16",
+    model_checkpoint="seresnext50_32x4d_2_128_fp16",
     epoch=(10, 10),
 )
 # -------------------------------------299-------------------------------------------
@@ -80,6 +78,6 @@ train(
     299,
     batch_size=64,
     model_filename="seresnext50_32x4",
-    model_checkpoint="seresnext50_32x4d_2_224_mixup_fp16",
+    model_checkpoint="seresnext50_32x4d_2_224_fp16",
     epoch=(6, 6),
 )
