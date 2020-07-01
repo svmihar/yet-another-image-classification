@@ -31,7 +31,7 @@ def get_learner(data, model_checkpoint=None):
         data, resnext50_32x4d, pretrained=True, cut=-2, metrics=[accuracy]
     )
     learn.loss_fn = FocalLoss()
-    learn = learn.mixup().to_fp16()
+    learn = learn.to_fp16()
     if model_checkpoint is not None:
         learn.data = data
         learn.load(model_checkpoint)
