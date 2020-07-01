@@ -13,7 +13,7 @@ pip install tensorflow-gpu==1.14.0 keras==2.3.0
 - [x] 299 cuman dapet 82an
 
 ### 50-32x4d with more less augmentation + mixup and fp16
-- [x] 128 training phase 1
+- [x] 128 training phase 1 # removed mixup karena malah bikin kaacau, pake mixup di akhir 299 aja biar lebih cepet training nya converge
 - [ ] 224
 - [ ] 299
 

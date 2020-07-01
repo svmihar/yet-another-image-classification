@@ -37,7 +37,6 @@ def get_learner(data, model_checkpoint=None):
         learn.load(model_checkpoint)
         learn.freeze()
         learn = learn.clip_grad()
-        learn.mixup().to_fp16()
         return learn
 
     return learn

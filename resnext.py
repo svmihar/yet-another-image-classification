@@ -42,6 +42,7 @@ def train(
     min_grad_lr = learn.recorder.min_grad_lr
     print(min_grad_lr)
     logging.info("training")
+    """
     # ------------------PHASE 1--------------------
     learn.fit_one_cycle(epoch[0], max_lr=slice(min_grad_lr / 10, min_grad_lr))
     learn.save(f"{model_filename}_1_{resolution}_mixup_fp16")
@@ -52,11 +53,14 @@ def train(
     learn.recorder.plot(suggestion=True)
     min_grad_lr = learn.recorder.min_grad_lr
     print(min_grad_lr)
+    """
     logging.info("phase 2 start")
     # ------------------PHASE 2--------------------
-    learn.load(f"{model_filename}_1_{resolution}_mixup_fp16")
+    learn.load(f"{model_filename}_1_{resolution}_fp16")
     learn.unfreeze()
+    learn.to_fp16()
     learn.recorder.plot(suggestion=True)
+    min_grad_lr = learn.recorder.min_grad_lr
     learn = learn.clip_grad()
     learn.fit_one_cycle(epoch[1], slice(min_grad_lr / 10, min_grad_lr))
     learn.save(f"{model_filename}_2_{resolution}_mixup_fp16")
