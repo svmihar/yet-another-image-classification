@@ -22,29 +22,30 @@ def get_data(bs, size):
                                   num_workers = 50
                                   ).normalize(imagenet_stats)
 
-def stage1(learn, data=None):
+def stage1(learn, data=None, save_filename=None, load_filname=None):
     if data: 
         learn.data=data
-        learn.to_fp16()
+    learn.to_fp16()
     learn.freeze()
     learn.fit_one_cycle(5)
     
-def stage2(learn, load_filename=None): 
+def stage2(learn, save_filename=None, ): 
     learn.unfreeze()
     learn.lr_find()
     learn.recorder.plot(suggestion=True)
     min_grad_lr = learn.recorder.min_grad_lr
     learn.fit_one_cycle(5, slice(min_grad_lr/40, min_grad_lr))
     
-def train(learn, data, save_filename, sz, bs=64, load_filename=None): 
-    learn.load(load_filename, purge=True)
-    data = get_data(bs, sz)
+def train(learn, data, save_filename, sz, bs=64, load_filename=None):
+    if load_filename: 
+        learn.load(load_filename, purge=True)
+    data = get_data(sz=sz, bs=bs)
     stage1(learn, data)
     stage2(learn)
     learn.save(save_filename)
     
-    
-model = EfficientNet.from_pretrained('efficientnet-b5')
+model = EfficientNet.from_pretrained('efficientnet-b0')
+data = get_data(64, 128)
 model._fc = nn.Linear(model._fc.in_features, data.c)
 learn = Learner(data, model,
                metrics = [accuracy], 
@@ -62,18 +63,18 @@ learn.split(lambda m: (model._conv_head,))
 # 128
 stage1(learn)
 stage2(learn)
-learn.save('b5-epoch5-128')
-learn.load('b5-epoch5-128', purge=True)
+learn.save('bs-epoch5-128')
 
 # 256
-train(learn, data, 'b5-epoch5-256', 256, load_filename='b5-epoch5-128')
+data = get
+train(learn, data, 'b5-epoch5-256', bs=256, load_filename='b5-epoch5-128')
 
 # 384
-train(learn, data, 'b5-epoch5-384', 384, load_filename='b5-epoch5-256')
+train(learn, data, 'b5-epoch5-384',bs= 384, load_filename='b5-epoch5-256')
 
 # 456
-train(learn, data, 'b5-epoch5-456', 456, load_filename='b5-epoch5-384')
+train(learn, data, 'b5-epoch5-456', bs=456, load_filename='b5-epoch5-384')
 
 
 # 512
-train(learn, data, 'b5-epoch5-512', 512, load_filename='b5-epoch5-456')
+train(learn, data, 'b5-epoch5-512',bs= 512, load_filename='b5-epoch5-456')
