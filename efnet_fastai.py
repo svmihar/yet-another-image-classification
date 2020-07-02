@@ -39,7 +39,7 @@ def stage2(learn, save_filename=None, ):
 def train(learn, data, save_filename, sz, bs=64, load_filename=None):
     if load_filename: 
         learn.load(load_filename, purge=True)
-    data = get_data(sz=sz, bs=bs)
+    data = get_data(size=sz, bs=bs)
     stage1(learn, data)
     stage2(learn)
     learn.save(save_filename)
@@ -58,15 +58,16 @@ learn.split(lambda m: (model._conv_head,))
 
 
 # 128
+''' UDAH SELESAI
 stage1(learn)
 stage2(learn)
 learn.save('bs-epoch5-128')
-
+'''
 # 256
-data = get
-train(learn, data, 'b5-epoch5-256', bs=256, load_filename='b5-epoch5-128')
+train(learn, data, 'b5-epoch5-256', bs=256, sz=64, load_filename='bs-epoch5-128')
 
 # 384
+data = get_data(64, 384)
 train(learn, data, 'b5-epoch5-384',bs= 384, load_filename='b5-epoch5-256')
 
 # 456
