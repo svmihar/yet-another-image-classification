@@ -43,6 +43,7 @@ def train(
     print(min_grad_lr)
     logging.info("training")
     # ------------------PHASE 1--------------------
+    """
     learn.fit_one_cycle(epoch[0], max_lr=slice(min_grad_lr / 10, min_grad_lr))
     learn.save(f"{model_filename}_1_{resolution}_fp16")
     logging.info("phase 1 done")
@@ -51,7 +52,7 @@ def train(
     learn.lr_find()
     learn.recorder.plot(suggestion=True)
     min_grad_lr = learn.recorder.min_grad_lr
-    print(min_grad_lr)
+    print(min_grad_lr)"""
     logging.info("phase 2 start")
     # ------------------PHASE 2--------------------
     learn.load(f"{model_filename}_1_{resolution}_fp16")
@@ -70,9 +71,11 @@ train(
     224,
     batch_size=64,
     model_filename="seresnext50_32x4d",
-    model_checkpoint="seresnext50_32x4d_2_128_fp16",
-    epoch=(10, 10),
+    model_checkpoint="seresnext50_32x4d_2_224_fp16",
+    epoch=(10, 6),
 )
+import os
+os.system("python finish_me.py")
 # -------------------------------------299-------------------------------------------
 train(
     299,

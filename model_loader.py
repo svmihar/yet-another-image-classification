@@ -36,7 +36,6 @@ def get_learner(data, model_checkpoint=None):
         learn.data = data
         learn.load(model_checkpoint)
         learn.freeze()
-        learn = learn.clip_grad()
         return learn
 
     return learn
