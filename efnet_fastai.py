@@ -52,8 +52,11 @@ learn = Learner(data, model,
                 bn_wd=False, #disable weight decay 
                 loss_func = LabelSmoothingCrossEntropy(), 
                 callback_fns=[BnFreeze,
-                             partial(SaveModelCallback, monitor='accuracy', name='most_accurate')],
-               path='./dataset').to_fp16() # because different clf layer, we use Learner.
+                             partial(SaveModelCallback, 
+                                     monitor='accuracy', 
+                                     name='most_accurate')],
+               path='./dataset').to_fp16() 
+# because different clf layer, we use Learner.
 learn.split(lambda m: (model._conv_head,))
 
 
