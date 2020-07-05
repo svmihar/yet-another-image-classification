@@ -14,8 +14,9 @@ pip install tensorflow-gpu==1.14.0 keras==2.3.0
 
 ### 50-32x4d with more less augmentation + mixup and fp16
 - [x] 128 training phase 1 # removed mixup karena malah bikin kaacau, pake mixup di akhir 299 aja biar lebih cepet training nya converge
-- [ ] 224
-- [ ] 299
+- [x] 224
+- [ ] 299 one epoch become 7 hours, which is ridiculuous, even with 8 batch_size
+final score: ~.82
 
 ## efficientnetB3
 gak ada image untuk di validate. `train_test_split` di train aja
@@ -26,8 +27,11 @@ jelek banget ini yang b3, cuman 55S
 
 ## efficientnetb0
 - [x] ganti validation steps ke 400
-- [ ] training
+- [ ] progressive training
+- [ ] fastinference
+final score .91
 
 
 # visualize
+- [ ] training 
  - [ ] [dari sini](https://www.youtube.com/watch?v=gMUgyy-BlmM)
