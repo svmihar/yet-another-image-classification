@@ -1,4 +1,5 @@
 models/
+*.html
 checkpoints/
 dataset/
 valid/
